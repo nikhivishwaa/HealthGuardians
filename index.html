@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chronic Disease Management System</title>
+    <!-- Include Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <!-- Header Section -->
+    <header class="bg-gray-900 text-white py-4">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <h1 class="text-2xl font-semibold">Chronic Disease Management System</h1>
+            <!-- Profile Button -->
+            <button class="bg-gray-800 hover:bg-gray-700 text-white py-2 px-4 rounded-md">Profile</button>
+        </div>
+    </header>
+
+    <!-- Main Content Section -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="bg-white shadow rounded-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">Dashboard</h2>
+            <!-- Health Status Graph -->
+            <div id="health-status-graph" class="bg-gray-100 p-6 rounded-lg mb-4">
+                <h3 class="text-lg font-semibold mb-2">Health Status Graph</h3>
+                <!-- Placeholder for the graph -->
+                <div id="graph-placeholder" class="w-full h-48 bg-gray-300"></div>
+            </div>
+            <!-- Reports Section -->
+            <div id="reports-section" class="bg-gray-100 p-6 rounded-lg">
+                <h3 class="text-lg font-semibold mb-2">Reports</h3>
+                <!-- Placeholder for reports -->
+                <ul id="reports-list" class="list-disc pl-8">
+                    <li>No reports available.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Other sections go here -->
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-gray-900 text-white py-4">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2024 Chronic Disease Management System</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for functionality -->
+    <script>
+        // Simulated data for the health status graph
+        const healthData = [
+            { date: '2024-01-01', value: 80 },
+            { date: '2024-01-02', value: 85 },
+            { date: '2024-01-03', value: 82 },
+            { date: '2024-01-04', value: 90 },
+            { date: '2024-01-05', value: 88 },
+            { date: '2024-01-06', value: 86 },
+            { date: '2024-01-07', value: 92 },
+        ];
+
+        // Function to update the health status graph
+        function updateHealthStatusGraph(data) {
+            const graphPlaceholder = document.getElementById('graph-placeholder');
+            // Convert data to Google Chart compatible format
+            const chartData = [['Date', 'Health']];
+            data.forEach(entry => {
+                chartData.push([entry.date, entry.value]);
+            });
+            // Load Google Charts library
+            google.charts.load('current', {'packages':['corechart']});
+            google.charts.setOnLoadCallback(drawChart);
+            // Draw the chart
+            function drawChart() {
+                const data = google.visualization.arrayToDataTable(chartData);
+                const options = {
+                    title: 'Health Status Over Time',
+                    curveType: 'function',
+                    legend: { position: 'bottom' }
+                };
+                const chart = new google.visualization.LineChart(graphPlaceholder);
+                chart.draw(data, options);
+            }
+        }
+
+        // Function to update the reports section
+        function updateReports(reports) {
+            const reportsList = document.getElementById('reports-list');
+            reportsList.innerHTML = ''; // Clear previous reports
+            if (reports.length === 0) {
+                reportsList.innerHTML = '<li>No reports available.</li>';
+            } else {
+                reports.forEach(report => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = report;
+                    reportsList.appendChild(listItem);
+                });
+            }
+        }
+
+        // Example data for reports
+        const reportsData = [
+            "January Report",
+            "February Report",
+            "March Report"
+        ];
+
+        // Call the functions to update the dashboard
+        updateHealthStatusGraph(healthData);
+        updateReports(reportsData);
+    </script>
+    <!-- Include Google Charts library -->
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+</body>
+</html>
