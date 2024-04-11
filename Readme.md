@@ -1,3 +1,4 @@
+### Project Setup
 
 ###### run after clone the repository
 
@@ -26,5 +27,16 @@ cd healthguardians
 ###### start the server
 
 ```
+python manage.py runserver
+```
+
+
+### Run the Project
+
+###### execute the foloowing command to run the app
+
+```
+.\env\Scripts\activate
+cd healthguardians
 python manage.py runserver
 ```
