@@ -4,124 +4,384 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chronic Disease Management System</title>
+    <title>HealthGuardian - Chronic Disease Management System</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
     <!-- Include Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body class="bg-gray-100">
     <!-- Header Section -->
-    <header class="bg-gray-50 text-black py-2">
-        <div class="container mx-auto px-4 flex justify-between items-center ">
-            <h1 class="text-2xl ">Chronic Disease Management System</h1>
-            <!-- Profile Button -->
-            <button
-                class="bg-gray-200 border-2 hover:bg-gray-300 text-black py-2 px-4 rounded-md">Profile</button>
+    <header class="bg-gray-900 text-white py-2 sticky top-0 z-20">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <h1 class="text-2xl font-semibold"><a href="#dashboard" class="hover:text-white text-decoration-none">HealthGuardiant</a></h1>
+            <!-- Navigation Links -->
+            <nav>
+                <ul class="flex space-x-4">
+                    <li><a href="#report" class="hover:text-gray-300 text-decoration-none">Get Report</a></li>
+                    <li><a href="#calorie-calculator-form" class="hover:text-gray-300 text-decoration-none">Calorie Calculator</a></li>
+                </ul>
+            </nav>
         </div>
     </header>
 
+
     <!-- Main Content Section -->
-    <main class="container mx-auto px-4 py-4">
+    <main class="container mx-auto px-4 py-4 scroll-smooth">
         <!-- Dashboard Section -->
         <section id="dashboard" class="bg-white shadow rounded-lg p-6 mb-8">
             <h2 class="text-xl font-semibold mb-4">Dashboard</h2>
             <!-- Health Status Graph -->
-            <div id="health-status-graph" class="bg-gray-50 p-6 rounded-lg mb-2 px-16 flex w-full " >
-                <div class="w-1/2 border-2 mx-2">
-                    <h3 class="text-lg font-semibold mb-2 ">Health Status Graph</h3>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis labore eum consectetur
-                        nostrum nobis voluptates deleniti commodi cum iste reprehenderit.</p>
-                </div>
+            <div id="health-status-graph" class="bg-gray-50 p-6 rounded-lg mb-4">
+                <h3 class="text-lg font-semibold mb-2">Health Status Graph</h3>
                 <!-- Placeholder for the graph -->
-                <div class="bg-gray-200 h-1/2 border-2 mx-2">
-                   
+                <div id="graph-placeholder" class="w-full h-64">
+                    <div class="container">
+                        <div class="row mt-5">
+                            <div class="col-md-6">
+                                <canvas id="pieChart"></canvas>
+                            </div>
+                            <div class="col-md-6">
+                                <canvas id="lineChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <!-- Reports Section -->
-            <div id="reports-section" class="bg-gray-100 p-6 rounded-lg">
-                <h3 class="text-lg font-semibold mb-2">Reports</h3>
-                <!-- Placeholder for reports -->
-                <ul id="reports-list" class="list-disc pl-8">
-                    <li>No reports available.</li>
-                </ul>
+            <!-- pridiction form -->
+            <div class="container mx-auto py-8" id="report">
+                <h1 class="text-2xl font-semibold mb-4">Diabetes Report</h1>
+                <div class="bg-gray-50 p-6 rounded-lg mb-4">
+                    <form id="diabetes-form" class="max-w-3xl mx-auto mt-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="mb-4">
+                                <label for="gender" class="block text-sm font-medium text-gray-700">Gender</label>
+                                <select id="gender" name="gender" class="mt-1 p-2 border rounded-md w-full"
+                                    onchange="togglePregnanciesField()">
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+                            <div class="mb-4 hidden" id="pregnancies-field">
+                                <label for="pregnancies"
+                                    class="block text-sm font-medium text-gray-700">Pregnancies</label>
+                                <input type="number" id="pregnancies" name="pregnancies"
+                                    class="mt-1 p-2 border rounded-md w-full">
+                            </div>
+                            <div class="mb-4">
+                                <label for="glucose" class="block text-sm font-medium text-gray-700">Glucose</label>
+                                <input type="number" id="glucose" name="glucose"
+                                    class="mt-1 p-2 border rounded-md w-full" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="blood-pressure" class="block text-sm font-medium text-gray-700">Blood
+                                    Pressure</label>
+                                <input type="number" id="blood-pressure" name="blood-pressure"
+                                    class="mt-1 p-2 border rounded-md w-full" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="skin-thickness" class="block text-sm font-medium text-gray-700">Skin
+                                    Thickness</label>
+                                <input type="number" id="skin-thickness" name="skin-thickness"
+                                    class="mt-1 p-2 border rounded-md w-full" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="insulin" class="block text-sm font-medium text-gray-700">Insulin</label>
+                                <input type="number" id="insulin" name="insulin"
+                                    class="mt-1 p-2 border rounded-md w-full" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="bmi" class="block text-sm font-medium text-gray-700">BMI</label>
+                                <input type="number" id="bmi" name="bmi" class="mt-1 p-2 border rounded-md w-full"
+                                    step='0.01' required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="diabetes-pedigree-function"
+                                    class="block text-sm font-medium text-gray-700">Diabetes
+                                    Pedigree Function</label>
+                                <input type="number" id="diabetes-pedigree-function" name="diabetes-pedigree-function"
+                                    step="0.001" class="mt-1 p-2 border rounded-md w-full" step='0.001' required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="age" class="block text-sm font-medium text-gray-700">Age</label>
+                                <input type="number" id="age" name="age" class="mt-1 p-2 border rounded-md w-full"
+                                    required>
+                            </div>
+                            <!-- Add other input fields here -->
+                        </div>
+                        <button type="submit"
+                            class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">Diabetes
+                            Report</button>
+                    </form>
+                </div>
+                <div id="prediction-result" class="mt-4"></div>
+            </div>
+            <!-- Calorie Calculator Section -->
+            <div id="calorie-calculator-section" class="bg-gray-50 p-6 rounded-lg">
+                <h3 class="text-lg font-semibold mb-2">Calorie Calculator</h3>
+                <form id="calorie-calculator-form">
+                    <!-- Food Selection -->
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label for="food" class="block text-sm font-medium text-gray-700">Select Food</label>
+                            <select id="food" name="food" class="mt-1 p-2 border rounded-md w-full">
+                                <option value="chapati">Chapati</option>
+                                <option value="rice">Rice</option>
+                                <option value="egg">Egg</option>
+                                <option value="milk">Milk</option>
+                                <option value="fish">Fish</option>
+                                <option value="fruits">Fruits</option>
+                                <option value="sweets">Sweets</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="food-quantity" class="block text-sm font-medium text-gray-700">Food Quantity
+                                (grams)</label>
+                            <input type="number" id="food-quantity" name="food-quantity"
+                                class="mt-1 p-2 border rounded-md w-full">
+                        </div>
+                    </div>
+                    <!-- Workout Selection -->
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label for="workout" class="block text-sm font-medium text-gray-700">Select Workout</label>
+                            <select id="workout" name="workout" class="mt-1 p-2 border rounded-md w-full">
+                                <option value="walk">Walk</option>
+                                <option value="cycling">Cycling</option>
+                                <option value="skipping">Skipping</option>
+                                <option value="swimming">Swimming</option>
+                                <option value="jogging">Jogging</option>
+                                <option value="squats">Squats</option>
+                                <option value="stretching">Stretching</option>
+                                <option value="jumping">Jumping</option>
+                                <option value="pushups">Pushups</option>
+                                <option value="pullups">Pullups</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="workout-duration" class="block text-sm font-medium text-gray-700">Workout
+                                Duration
+                                (minutes)</label>
+                            <input type="number" id="workout-duration" name="workout-duration"
+                                class="mt-1 p-2 border rounded-md w-full">
+                        </div>
+                    </div>
+                    <!-- Submit Button -->
+                    <button type="submit"
+                        class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">Calculate
+                        Calories</button>
+                </form>
+                <!-- Result Display -->
+                <div class="mt-4">
+                    <canvas id="calorie-chart" width="400" height="200"></canvas>
+                </div>
+            </div>
+            </div>
             </div>
         </section>
-
-        <!-- Other sections go here -->
     </main>
 
     <!-- Footer Section -->
     <footer class="bg-gray-900 text-white py-4">
         <div class="container mx-auto px-4 text-center">
-            <p>&copy; 2024 Chronic Disease Management System</p>
+            <p>&copy; 2024 HealthGuardian - Chronic Disease Management System</p>
         </div>
     </footer>
 
     <!-- JavaScript for functionality -->
     <script>
-        // Simulated data for the health status graph
-        const healthData = [
-            { date: '2024-01-01', value: 80 },
-            { date: '2024-01-02', value: 85 },
-            { date: '2024-01-03', value: 82 },
-            { date: '2024-01-04', value: 90 },
-            { date: '2024-01-05', value: 88 },
-            { date: '2024-01-06', value: 86 },
-            { date: '2024-01-07', value: 92 },
-        ];
+        const pieData = {
+            labels: ['Carbs', 'Proteins', 'Fats'],
+            datasets: [{
+                data: [40, 30, 30],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                ],
+                borderWidth: 1
+            }]
+        };
 
-        // Function to update the health status graph
-        function updateHealthStatusGraph(data) {
-            const graphPlaceholder = document.getElementById('graph-placeholder');
-            // Convert data to Google Chart compatible format
-            const chartData = [['Date', 'Health']];
-            data.forEach(entry => {
-                chartData.push([entry.date, entry.value]);
+        // Dummy data for line chart
+        const lineData = {
+            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
+            datasets: [{
+                label: 'Glucose Level',
+                data: [90, 95, 100, 98, 102, 96],
+                backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                borderColor: 'rgba(255, 159, 64, 1)',
+                borderWidth: 2
+            }]
+        };
+
+        // Pie Chart
+        new Chart(document.getElementById('pieChart'), {
+            type: 'pie',
+            data: pieData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                title: {
+                    display: true,
+                    text: 'Nutrient Distribution'
+                }
+            }
+        });
+
+        // Line Chart
+        new Chart(document.getElementById('lineChart'), {
+            type: 'line',
+            data: lineData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                title: {
+                    display: true,
+                    text: 'Glucose Level Over Time'
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+         // Function to calculate calorie intake
+         function calculateCalories() {
+            const food = document.getElementById('food').value;
+            const foodQuantity = parseInt(document.getElementById('food-quantity').value);
+            const workout = document.getElementById('workout').value;
+            const workoutDuration = parseInt(document.getElementById('workout-duration').value);
+
+            // Calorie values per gram for different foods
+            const calorieMap = {
+                chapati: 3.3,
+                rice: 1.4,
+                egg: 155,
+                milk: 42,
+                fish: 206,
+                fruits: 52,
+                sweets: 400
+            };
+
+            // Calorie values per minute for different workouts
+            const calorieBurnMap = {
+                walk: 5,
+                cycling: 8,
+                skipping: 10,
+                swimming: 12,
+                jogging: 12,
+                squats: 8,
+                stretching: 4,
+                jumping: 10,
+                pushups: 10,
+                pullups: 15
+            };
+
+            // Calculate total calorie intake
+            const totalCalorieIntake = calorieMap[food] * foodQuantity;
+
+            // Calculate total calories burnt
+            const totalCaloriesBurnt = calorieBurnMap[workout] * workoutDuration;
+
+            // Display the result in a chart
+            displayCalorieChart(totalCalorieIntake, totalCaloriesBurnt);
+        }
+
+        // Function to display the result in a chart
+        function displayCalorieChart(totalCalorieIntake, totalCaloriesBurnt) {
+            const ctx = document.getElementById('calorie-chart').getContext('2d');
+            const calorieChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Calories Intake', 'Calories Burnt'],
+                    datasets: [{
+                        label: 'Calories',
+                        data: [totalCalorieIntake, totalCaloriesBurnt],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)', // Red for intake
+                            'rgba(54, 162, 235, 0.2)'  // Blue for burnt
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
             });
-            // Load Google Charts library
-            google.charts.load('current', { 'packages': ['corechart'] });
-            google.charts.setOnLoadCallback(drawChart);
-            // Draw the chart
-            function drawChart() {
-                const data = google.visualization.arrayToDataTable(chartData);
-                const options = {
-                    title: 'Health Status Over Time',
-                    curveType: 'function',
-                    legend: { position: 'bottom' }
-                };
-                const chart = new google.visualization.LineChart(graphPlaceholder);
-                chart.draw(data, options);
+        }
+
+        // Form submission handling
+        const calorieCalculatorForm = document.getElementById('calorie-calculator-form');
+        calorieCalculatorForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            calculateCalories();
+        });
+
+
+        function togglePregnanciesField() {
+            const gender = document.getElementById('gender').value;
+            const pregnanciesField = document.getElementById('pregnancies-field');
+            pregnanciesField.classList.toggle('hidden', gender !== 'female');
+            if (gender !== 'female') {
+                // If gender is not female, reset pregnancies value to 0
+                document.getElementById('pregnancies').value = 0;
             }
         }
 
-        // Function to update the reports section
-        function updateReports(reports) {
-            const reportsList = document.getElementById('reports-list');
-            reportsList.innerHTML = ''; // Clear previous reports
-            if (reports.length === 0) {
-                reportsList.innerHTML = '<li>No reports available.</li>';
-            } else {
-                reports.forEach(report => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = report;
-                    reportsList.appendChild(listItem);
+        document.getElementById('diabetes-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const formData = {
+                'Pregnancies': parseInt(document.getElementById('pregnancies').value) || 0,
+                'Glucose': parseInt(document.getElementById('glucose').value),
+                'BloodPressure': parseInt(document.getElementById('blood-pressure').value),
+                'SkinThickness': parseInt(document.getElementById('skin-thickness').value),
+                'Insulin': parseInt(document.getElementById('insulin').value),
+                'BMI': parseFloat(document.getElementById('bmi').value),
+                'DiabetesPedigreeFunction': parseFloat(document.getElementById('diabetes-pedigree-function').value),
+                'Age': parseInt(document.getElementById('age').value)
+            };
+
+            // Make POST request to Django server
+            fetch('http://localhost:8000/api/test', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Display prediction result
+                    const predictionResultElement = document.getElementById('prediction-result');
+                    predictionResultElement.innerHTML = `<p>You ${data.diabetic ? 'have' : 'dont have'} Diabetes</p>`;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
                 });
-            }
-        }
-
-        // Example data for reports
-        const reportsData = [
-            "January Report",
-            "February Report",
-            "March Report"
-        ];
-
-        // Call the functions to update the dashboard
-        updateHealthStatusGraph(healthData);
-        updateReports(reportsData);
+        });
     </script>
-    <!-- Include Google Charts library -->
-    <script src="https://www.gstatic.com/charts/loader.js"></script>
 </body>
 
 </html>
